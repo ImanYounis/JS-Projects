@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WeatherApp</title>
+<script src="skycons-master/skycons.js"></script>
+<style>
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+}
+body{
+	height:100vh;
+	display:flex;
+	justify-content:center;
+	flex-direction:column;
+	align-items:center;
+	background:linear-gradient(rgb(47,150,163),rgb(48,62,143));
+	font-family:sans-serif;
+	color:white;
+}
+.location,.temperature{
+	height:30vh;
+	width:50%;
+	display:flex;
+	justify-content:space-around;
+	align-items:center;
+}
+.temperature{
+	flex-direction:column;
+}
+.degree-section{
+	display:flex;
+	align-items:center;
+}
+.degree-section span{
+	margin:10px;
+	font-size:30px;
+}
+.degree-section h2{
+	font-size:40px;
+}
+.icon{
+	color:white;
+}
+</style>
+</head>
+<body>
+
+<div class="location">
+  <h1 class="location-timezone">Timezone</h1>
+  <canvas class="icon" width="128" height="128"></canvas>
+</div>
+<div class="temperature">
+  <div class="degree-section">
+    <h2 class="temperature-degree">34</h2>
+    <span>F</span>
+  </div>
+  <div class="temperature-description">It's freezing cold!</div>
+</div>
+</body>
+<script>
+window.addEventListener('load', () => {
+  let lon;
+  let lat; 
+  let temperatureSection = document.querySelector(".temperature");
+  const temperatureSpan = document.querySelector(".temperature span");
+  let loctimezone = document.querySelector(".location-timezone");
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      lat = pos.coords.latitude;
+      lon = pos.coords.longitude;
+      const accessKey = "9da8b69b-a2c2-49dc-900d-8f5b06b0c641";
+      const apiUrl = `https://api.meteum.ai/v1/forecast?lat=${lat}&lon=${lon}`;
+      const headers = new Headers();
+      headers.append("X-Meteum-API-Key", accessKey);
+
+      fetch(apiUrl, { headers: headers })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          const timezone = data.info.tzinfo.name;
+          const temperature = data.fact.temp;
+          const description = data.fact.condition;
+          let celsius = (temperature - 32) * (5 / 9);
+          const tempDegreeElement = document.querySelector(".temperature-degree");
+          const tempDescripElement = document.querySelector(".temperature-description");
+          let icon = data.fact.icon;         
+          loctimezone.textContent = timezone;
+          tempDegreeElement.textContent = temperature;
+          tempDescripElement.textContent = description;
+
+          setIcons(icon, document.querySelector(".icon"));
+
+          temperatureSection.addEventListener('click', () => {
+            if (temperatureSpan.textContent === "F") {
+              temperatureSpan.textContent = "C";
+              tempDegreeElement.textContent = Math.round(celsius);
+            } else {
+              temperatureSpan.textContent = "F";
+              tempDegreeElement.textContent = temperature;
+            }
+          });
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    });
+  }
+
+  function setIcons(icon, iconID) {
+    const skycons = new Skycons({color:"white"});
+    let currenticon = icon.replace(/-/g, "_").toUpperCase();
+if(icon==="skc_n")
+currenticon="CLEAR_NIGHT";
+else if(icon==="skc_d")
+currenticon="CLEAR_NIGHT";
+else if(icon==="bkn_n")
+currenticon="PARTLY_CLOUDY_NIGHT";
+else if(icon==="bkn_d")
+currenticon="PARTLY_CLOUDY_DAY";
+else if(icon==="bkn_-ra_d"||icon==="bkn_-ra_n"||icon==="bkn_ra_d"||icon==="bkn_ra_n"||icon==="bkn_+ra_d"||icon==="bkn_+ra_n")
+currenticon="RAIN";
+else if(icon==="bkn_-sn_d"||icon==="bkn_-sn_n"||icon==="bkn_sn_d"||icon==="bkn_sn_n"||icon==="bkn_+sn_d"||icon==="bkn_+sn_n")
+currenticon="SNOW";
+else if(icon==="du_st"||icon==="dst"||icon==="bl"||icon==="-bl"||icon==="ovc_ha")
+currenticon="WIND";
+else if(icon==="fg_d"||icon==="fg_n"||icon==="smog")
+currenticon="FOG";
+else
+currenticon="CLOUDY";
+
+    skycons.add(iconID, Skycons[currenticon]); // Use 'add' instead of 'set'
+    skycons.play();
+  }
+});
+</script>
+</html>

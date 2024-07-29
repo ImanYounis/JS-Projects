@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+<div id="gamediv">
+<h1 id="playerText">PLayer:</h1>
+<h1 id="computerText">computer:</h1>
+<h1 id="resultText">result:</h1>
+<button class="choiceBtn">ROCK</button>
+<button class="choiceBtn">SCISSORS</button>
+<button class="choiceBtn">PAPER</button>
+</div>
+</body>
+<style>
+#gamediv{
+font-family:'Brush Script MT', cursive;
+border:3px solid;
+border-radius:25px;
+padding:10px;
+backgroung-color:black;
+text-align:center;
+}
+.choicebtn{
+line-height:30px;
+width:150px;
+}
+#ptext{
+color:blue;
+}
+#ctext{
+color:red;
+}
+#rtext{
+color:pink;
+}
+</style>
+<script>/*
+const ptext=document.querySelector("#ptext");
+const ctext=document.querySelector("#ctext");
+const rtext=document.querySelector("#rtext");
+const choicebtns=document.querySelector(".choicebtn");
+let player;let comp;let result;
+choicebtns.forEach(button=>button.addEventListener("click",()=>{
+player=button.textContent;
+compturn();
+ptext.textContent=`player:${player}`;
+ctext.textContent=`Computer:${comp}`;
+rtext.textContent=checkwinner();
+}));
+function compturn(){
+const rand=Math.floor(Math.random()*3)+1;
+switch(rand){
+case 1:
+comp="ROCK";
+break;
+case 2:
+comp="SCISSORS";
+break;
+case 3:
+comp="PAPER";
+break;
+}
+}
+function checkwinner(){
+if(player==comp)
+return "draw";
+else if(comp=="ROCK")
+return (player=="PAPER")?"you win":"you lose";
+else if(comp=="SCISSORS")
+return (player=="PAPER")?"you lose":"you win";
+else if(comp=="PAPER")
+return (player=="SCISSORS")?"you win":"you lose";
+}*/
+const playerText = document.querySelector("#playerText");
+const computerText = document.querySelector("#computerText");
+const resultText = document.querySelector("#resultText");
+const choiceBtns = document.querySelectorAll(".choiceBtn");
+let player;
+let computer;
+let result;
+
+choiceBtns.forEach(button => button.addEventListener("click", () => {
+
+    player = button.textContent;
+    computerTurn();
+    playerText.textContent = `Player: ${player}`;
+    computerText.textContent = `Computer: ${computer}`;
+    resultText.textContent = checkWinner();
+}));
+
+function computerTurn(){
+
+    const randNum = Math.floor(Math.random() * 3) + 1;
+
+    switch(randNum){
+      case 1:
+        computer = "ROCK";
+        break;
+      case 2:
+        computer = "PAPER";
+        break;
+      case 3:
+        computer = "SCISSORS";
+        break;
+    }
+}
+function checkWinner(){
+    if(player == computer){
+      return "Draw!";
+    }
+    else if(computer == "ROCK"){
+      return (player == "PAPER") ? "You Win!" : "You Lose!"
+    }
+    else if(computer == "PAPER"){
+      return (player == "SCISSORS") ? "You Win!" : "You Lose!"
+    }
+    else if(computer == "SCISSORS"){
+      return (player == "ROCK") ? "You Win!" : "You Lose!"
+    }
+}
+</script>
+</html>
+
+

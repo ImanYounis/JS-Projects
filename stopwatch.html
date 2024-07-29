@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+ <div id="timeContainer">
+        <div id="timeDisplay">00:00:00</div>
+        <button id="startbtn" class="timerBtn">Start</button>
+        <button id="pausebtn" class="timerBtn">Pause</button>
+        <button id="resetbtn" class="timerBtn">Reset</button>
+    </div>
+</body>
+<script>
+const startbtn=document.querySelector("#startbtn");
+const pausebtn=document.querySelector("#pausebtn");
+const resetbtn=document.querySelector("#resetbtn");
+let starttime=0;
+let currenttime=0;
+let elapsedtime=0;
+let paused=true;
+let intervalID;
+let hr=0;
+let min=0;let sec=0;
+startbtn.addEventListener("click",()=>{
+if(paused){
+paused=false;
+starttime=Date.now()-elapsedtime;
+intervalID=setInterval(updatetime,1000);
+}
+});
+pausebtn.addEventListener("click",()=>{
+if(!paused){
+paused=true;
+elapsedtime=Date.now()-starttime;
+clearInterval(intervalID);
+}
+});
+resetbtn.addEventListener("click",()=>{
+paused=true;
+clearInterval(intervalID);
+starttime=0;
+elapsedtime=0;
+currenttime=0;
+hr=0;min=0;sec=0;
+timeDisplay.textContent="00:00:00";
+});
+function updatetime(){
+elapsedtime=Date.now()-starttime;
+sec=Math.floor((elapsedtime/1000)%60);
+min=Math.floor((elapsedtime/(1000*60))%60);
+hr=Math.floor((elapsedtime/(1000*60*60))%60);
+hr=pad(hr);min=pad(min);
+sec=pad(sec);
+timeDisplay.textContent=`${hr}:${min}:${sec}`;
+function pad(unit){
+return (("0")+unit).length>2?unit:"0"+unit;
+}}
+</script>
+</html>
